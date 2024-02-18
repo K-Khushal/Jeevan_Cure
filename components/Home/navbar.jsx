@@ -18,7 +18,7 @@ export default function Navbar() {
             {link.label}
           </a>
         ))}
-          <a href="/dashboard" className="bg-blue-600 px-8 py-2 rounded-xl font-bold text-white">Login</a>
+          <a href="/Dashboard" className="bg-blue-600 px-8 py-2 rounded-xl font-bold text-white">Login</a>
       </div>
     </nav>
   );
