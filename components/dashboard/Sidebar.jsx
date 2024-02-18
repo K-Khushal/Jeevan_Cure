@@ -17,25 +17,25 @@ export default function Sidebar() {
             <Image src="/logo.png" alt="Logo" height={80} width={80} />
           </Link>
           <div className="flex flex-col gap-10">
-            <Link href={"/Dashboard"}>
+            <Link href={"/dashboard"}>
               <LuLayoutDashboard
                 size={40}
                 className="cursor-pointer bg-white p-1 text-black rounded-md"
               />
             </Link>
 
-            <Link href={"/Dashboard/Calender"}>
+            <Link href={"/dashboard/appointments"}>
               <SlCalender size={40} className="cursor-pointer hover:text-yellow-500" />
             </Link>
 
-            <Link href={"/Maps"}>
+            <Link href={"/dashboard/nearby-hospitals"}>
               <FaMapLocationDot
                 size={40}
                 className="cursor-pointer hover:text-yellow-500"
               />
             </Link>
 
-            <Link href={"/Profile"}>
+            <Link href={"/dashboard/profile"}>
               <FaUser 
                 size={40}
                 className="cursor-pointer hover:text-yellow-500"
