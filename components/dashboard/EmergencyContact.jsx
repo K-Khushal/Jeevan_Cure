@@ -1,9 +1,8 @@
 "use client";
-import Image from "next/image";
+
 import React, { useEffect, useState } from "react";
 import { FaUserEdit } from "react-icons/fa";
 import AddContact from "./Modal";
-import EditContact from "./EditContact";
 import { sendSMS } from "@/app/lib/send-sms";
 
 

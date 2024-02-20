@@ -34,7 +34,6 @@ export function SendForm() {
     return (
         <form action={formAction} className="flex flex-col gap-2 mx-44 p-10 bg-black text-white shadow-md rounded-xl">
             <div className="flex p-3 items-center justify-between">
-                <img src="../vonage.svg" alt="Vonage" />
                 <h2 className="text-lg font-medium">Send SMS with the Vonage APIs</h2>
             </div>
             <label htmlFor="number">Phone number:</label>
