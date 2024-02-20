@@ -11,11 +11,11 @@ const vonage = new Vonage({
 const from = process.env.VONAGE_VIRTUAL_NUMBER;
 
 export async function sendSMS(numbers) {
-  let number = numbers[0];
-  console.log(number);
+  // let number = numbers[0];
+  console.log(numbers);
   try {
     const vonage_response = await vonage.sms.send({
-      to: number,
+      to: numbers,
       from,
       text: "Hey I have an emergency! Please contact soon",
     });

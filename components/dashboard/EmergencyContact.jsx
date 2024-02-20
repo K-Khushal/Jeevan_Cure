@@ -41,8 +41,10 @@ export default function EmergencyContact() {
 
   const handleEmergencyClick = () => {
     const numbers = contacts.map((contact) => String(contact.number));
-    console.log(numbers[0]);
-    sendSMS(numbers);
+    console.log(numbers);
+    for(let i=0; i<numbers.length; i++){
+      sendSMS(numbers[i]).then(r => console.log(r, numbers[i]));
+    }
   };
 
   return (
