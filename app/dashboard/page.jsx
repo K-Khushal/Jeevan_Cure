@@ -18,7 +18,7 @@ export default function Home() {
     });
 
     return (
-        <main className="min-h-screen bg-white text-black  py-2">
+        <main className="min-h-screen bg-white text-black py-2">
             <div className="pt-3 flex flex-col m-20">
                 <h1 className="font-medium font-serif text-4xl">Health Overview</h1>
                 <p className="text-slate-700">{fDate}</p>
