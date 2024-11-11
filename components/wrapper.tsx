@@ -19,7 +19,7 @@ export function Wrapper(props: { children: React.ReactNode }) {
           <ThemeToggle />
         </div>
       </div>
-      <div className="mt-20 lg:w-7/12 w-full">{props.children}</div>
+      <div>{props.children}</div>
     </div>
   );
 }

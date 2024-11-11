@@ -1,7 +1,7 @@
-import {ThemeProvider} from "@/components/theme-provider";
-import {Toaster} from "@/components/ui/sonner";
-import {Wrapper, WrapperWithQuery} from "@/components/wrapper";
-import type {Metadata} from "next";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { WrapperWithQuery } from "@/components/wrapper";
+import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -32,9 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system">
-          <Wrapper>
-            <WrapperWithQuery>{children}</WrapperWithQuery>
-          </Wrapper>
+          <WrapperWithQuery>{children}</WrapperWithQuery>
           <Toaster richColors closeButton />
         </ThemeProvider>
       </body>
