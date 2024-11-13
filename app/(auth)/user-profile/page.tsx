@@ -51,7 +51,7 @@ async function fetchUserData() {
       deviceSessions,
     };
   } catch (error) {
-    toast.error("An error occurred while fetching user data", error);
+    toast.error("An error occurred while fetching user data");
     throw redirect("/sign-in");
   }
 }
