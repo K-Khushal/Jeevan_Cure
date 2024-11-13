@@ -33,12 +33,14 @@ const SignIn = () => {
           email,
           password,
           callbackURL: "/dashboard",
-          dontRememberMe: !rememberMe,
+          rememberMe,
         },
         {
+          onRequest: () => {
+            setLoading(true);
+          },
           onResponse: () => {
             setLoading(false);
-            router.push("/dashboard");
           },
           onError: (ctx) => {
             toast.error(ctx.error.message);
@@ -58,7 +60,7 @@ const SignIn = () => {
         {
           username: email,
           password,
-          dontRememberMe: !rememberMe,
+          rememberMe,
         },
         {
           onResponse: () => {
