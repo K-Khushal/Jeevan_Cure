@@ -4,6 +4,7 @@ import { Session } from "@/lib/auth-types";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { toast } from "sonner";
 import UserCard from "./user-card";
 
 // Error boundary component for handling errors gracefully
@@ -50,15 +51,8 @@ async function fetchUserData() {
       deviceSessions,
     };
   } catch (error) {
-    if (error instanceof Error) {
-      // Handle specific error types if needed
-      if (error.message.includes("unauthorized")) {
-        redirect("/sign-in");
-      }
-    }
-    // For any other errors, redirect to sign-in
-    console.error(error);
-    redirect("/sign-in");
+    toast.error("An error occurred while fetching user data", error);
+    throw redirect("/sign-in");
   }
 }
 
