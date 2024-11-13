@@ -32,6 +32,7 @@ const SignIn = () => {
         {
           email,
           password,
+          callbackURL: "/dashboard",
           dontRememberMe: !rememberMe,
         },
         {

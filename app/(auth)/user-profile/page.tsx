@@ -57,6 +57,7 @@ async function fetchUserData() {
       }
     }
     // For any other errors, redirect to sign-in
+    console.error(error);
     redirect("/sign-in");
   }
 }
