@@ -1,5 +1,6 @@
 import { SignInButton } from "@/components/sign-in-btn";
 import { SignInFallback } from "@/components/sign-in-btn";
+import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -24,6 +25,7 @@ export default function Navbar() {
             <Suspense fallback={<SignInFallback />}>
               <SignInButton />
             </Suspense>
+            <ThemeToggle />
           </div>
         </div>
       </div>
