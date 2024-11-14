@@ -26,9 +26,9 @@ import * as React from "react";
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "Khushal",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/Logo.png",
   },
   navMain: [
     {

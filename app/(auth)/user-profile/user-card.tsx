@@ -179,8 +179,11 @@ export default function UserCard(props: {
             setIsSignOut(true);
             await signOut({
               fetchOptions: {
-                onSuccess() {
-                  router.push("/");
+                onSuccess: () => {
+                  router.refresh();
+                },
+                onError: (ctx) => {
+                  toast.error("Something went wrong");
                 },
               },
             });

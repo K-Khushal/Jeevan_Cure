@@ -16,7 +16,8 @@ export default async function authMiddleware(request: NextRequest) {
 
   const authPages = ["/sign-in", "/sign-up"];
   const isAuthPage = authPages.includes(request.nextUrl.pathname);
-  const isDashboardPage = request.nextUrl.pathname === "/dashboard";
+  const privatePages = ["/dashboard", "/user-profile"];
+  const isPrivatePage = privatePages.includes(request.nextUrl.pathname);
 
   // If user is not logged in and tries to access any protected route
   // if (!session) {
@@ -29,7 +30,7 @@ export default async function authMiddleware(request: NextRequest) {
   }
 
   // If non-logged-in user tries to access dashboard
-  if (isDashboardPage && !session) {
+  if (isPrivatePage && !session) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
@@ -37,5 +38,5 @@ export default async function authMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/sign-in", "/sign-up"],
+  matcher: ["/dashboard", "/user-profile", "/sign-in", "/sign-up"],
 };
