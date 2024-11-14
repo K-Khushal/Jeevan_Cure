@@ -1,19 +1,23 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { listSessions } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import UserCard from "./user-card";
 
 export default async function DashboardPage() {
-  const [session, activeSessions] = await Promise.all([
-    auth.api.getSession({
-      headers: await headers(),
-    }),
-    auth.api.listSessions({
-      headers: await headers(),
-    }),
-  ]).catch((e) => {
-    throw redirect("/sign-in");
-  });
+  // const [session, activeSessions] = await Promise.all([
+  //   auth.api.getSession({
+  //     headers: await headers(),
+  //   }),
+  //   auth.api.listSessions({
+  //     headers: await headers(),
+  //   }),
+  // ]).catch((e) => {
+  //   throw redirect("/sign-in");
+  // });
+
+  const session = await getSession();
+
+  const activeSessions = await listSessions();
+
   return (
     <div className="container mx-auto px-4 py-8">
       <UserCard
