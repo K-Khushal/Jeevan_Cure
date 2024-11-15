@@ -38,12 +38,13 @@ export default function HeroSection() {
               </a>
             </div>
             <h1 className="mt-8 text-wrap text-4xl md:text-5xl font-semibold text-title xl:text-5xl xl:[line-height:1.125]">
-              Tame the Wild West <br className="hidden sm:block" /> of Frontend
-              Development
+              Healthcare at your fingertips. <br className="hidden sm:block" />{" "}
+              Anytime, anywhere.
             </h1>
             <p className="text-wrap mx-auto mt-8 max-w-2xl text-lg">
-              Tailwindcss highly customizable components for building modern
-              websites and applications that look and feel the way you mean it.
+              With Jeevan Cure, help is always just a click away! Join us on
+              this journey towards a healthier and safer life with Jeevan Cure.
+              🌍
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-4">
               <Button
@@ -51,7 +52,7 @@ export default function HeroSection() {
                 size="lg"
               >
                 <Rocket />
-                Start Building
+                Get Started
               </Button>
             </div>
           </div>
