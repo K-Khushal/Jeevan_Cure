@@ -2,7 +2,7 @@ import { listSessions } from "@/lib/auth";
 import { getSession } from "@/lib/auth";
 import UserCard from "./user-card";
 
-export default async function DashboardPage() {
+export default function UserProfilePage() {
   // const [session, activeSessions] = await Promise.all([
   //   auth.api.getSession({
   //     headers: await headers(),
@@ -14,9 +14,9 @@ export default async function DashboardPage() {
   //   throw redirect("/sign-in");
   // });
 
-  const session = await getSession();
+  const session = getSession();
 
-  const activeSessions = await listSessions();
+  const activeSessions = listSessions();
 
   return (
     <div className="container mx-auto px-4 py-8">
