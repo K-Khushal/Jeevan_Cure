@@ -1,5 +1,5 @@
-import { SignInButton } from "@/components/sign-in-btn";
-import { SignInFallback } from "@/components/sign-in-btn";
+import { SignInButton } from "@/components/auth/sign-in-btn";
+import { SignInFallback } from "@/components/auth/sign-in-btn";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="px-6 m-auto max-w-6xl ">
         <div className="flex flex-wrap items-center justify-between py-2 sm:py-4">
           <div className="w-full items-center flex justify-between lg:w-auto">
-            <Link href="/" aria-label="logo">
+            <Link href="/public" aria-label="logo">
               <Image
                 className="block h-10 w-auto"
                 height="250"

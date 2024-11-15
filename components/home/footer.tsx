@@ -87,7 +87,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto space-y-12 px-6 py-16 ">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-8">
           <Link
-            href="/"
+            href="/public"
             aria-label="Logo"
             className="flex items-center justify-center space-x-3"
           >

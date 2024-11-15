@@ -1,8 +1,8 @@
 "use client";
 
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavMain } from "@/components/dashboard/nav-main";
+import { NavSecondary } from "@/components/dashboard/nav-secondary";
+import { NavUser } from "@/components/dashboard/nav-user";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sidebar,

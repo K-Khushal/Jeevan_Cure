@@ -4,7 +4,7 @@ import { LogIn } from "lucide-react";
 
 import { headers } from "next/headers";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 export async function SignInButton() {
   const session = await auth.api.getSession({
