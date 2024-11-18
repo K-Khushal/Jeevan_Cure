@@ -14,14 +14,15 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  BookOpen,
-  Bot,
+  Calendar,
   CircleUserRound,
   Command,
+  FileText,
   LifeBuoy,
   Send,
   SquareTerminal,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 
 const data = {
@@ -32,20 +33,20 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Dashboard",
+      url: "/",
       icon: SquareTerminal,
       isActive: true,
     },
     {
-      title: "Models",
+      title: "Appointments",
       url: "#",
-      icon: Bot,
+      icon: Calendar,
     },
     {
-      title: "Documentation",
+      title: "Documents",
       url: "#",
-      icon: BookOpen,
+      icon: FileText,
     },
     {
       title: "Profile",
@@ -68,6 +69,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const currentPath = usePathname(); // Get current path from Next.js router
+
   return (
     <Sidebar variant="inset" {...props} collapsible="icon">
       <SidebarHeader>
@@ -89,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} currentPath={currentPath} />
         {/*<NavProjects projects={data.projects} />*/}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
