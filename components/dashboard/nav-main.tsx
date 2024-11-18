@@ -57,7 +57,7 @@ export function NavMain({
             >
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  size="lg"
+                  className="h-12 text-sm"
                   asChild
                   tooltip={item.title}
                   isActive={isMainItemActive}

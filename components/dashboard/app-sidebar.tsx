@@ -18,9 +18,9 @@ import {
   CircleUserRound,
   Command,
   FileText,
+  LayoutDashboard,
   LifeBuoy,
   Send,
-  SquareTerminal,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -35,7 +35,7 @@ const data = {
     {
       title: "Dashboard",
       url: "/",
-      icon: SquareTerminal,
+      icon: LayoutDashboard,
       isActive: true,
     },
     {
