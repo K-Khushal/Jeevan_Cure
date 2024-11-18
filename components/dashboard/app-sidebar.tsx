@@ -40,12 +40,12 @@ const data = {
     },
     {
       title: "Appointments",
-      url: "#",
+      url: "/dashboard/appointments",
       icon: Calendar,
     },
     {
       title: "Documents",
-      url: "#",
+      url: "/dashboard/documents",
       icon: FileText,
     },
     {
