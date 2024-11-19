@@ -1,6 +1,6 @@
+import { AddAppointment } from "@/components/dashboard/appointment/add-appointment";
 import {
   Calendar,
-  CalendarCurrentDate,
   CalendarDayView,
   CalendarMonthView,
   CalendarNextTrigger,
@@ -33,7 +33,7 @@ export default function Page() {
       ]}
     >
       <div className="flex flex-col gap-4 p-4">
-        <div className="flex px-6 items-center gap-2 mb-6">
+        <div className="flex px-6 items-center gap-2">
           <CalendarViewTrigger
             className="aria-[current=true]:bg-accent"
             view="day"
@@ -55,7 +55,10 @@ export default function Page() {
 
           <span className="flex-1" />
 
-          <CalendarCurrentDate />
+          <AddAppointment />
+        </div>
+        <div className="flex px-6 items-center justify-end gap-2 mb-6">
+          {/*<CalendarCurrentDate />*/}
 
           <CalendarPrevTrigger>
             <ChevronLeft size={20} />
