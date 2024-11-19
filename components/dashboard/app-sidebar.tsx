@@ -34,13 +34,13 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/dashboard",
       icon: LayoutDashboard,
       isActive: true,
     },
     {
-      title: "Appointments",
-      url: "/dashboard/appointments",
+      title: "Appointment",
+      url: "/dashboard/appointment",
       icon: Calendar,
     },
     {

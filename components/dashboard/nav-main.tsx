@@ -36,7 +36,7 @@ export function NavMain({
 }) {
   const isItemActive = (itemUrl: string) => {
     // Exact match or starts with the item URL (for parent routes)
-    return currentPath === itemUrl || currentPath.startsWith(itemUrl);
+    return currentPath === itemUrl;
   };
 
   return (
