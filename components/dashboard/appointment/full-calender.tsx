@@ -151,7 +151,7 @@ const CalendarViewTrigger = forwardRef<
   return (
     <Button
       aria-current={currentView === view}
-      size="sm"
+      size="default"
       variant="ghost"
       {...props}
       ref={ref}
@@ -521,7 +521,7 @@ const CalendarTodayTrigger = forwardRef<
 
   return (
     <Button
-      variant="outline"
+      variant="default"
       ref={ref}
       {...props}
       onClick={(e) => {
