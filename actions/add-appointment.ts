@@ -1,11 +1,20 @@
 "use server";
 
+import { auth } from "@/lib/auth";
+
+import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
+
+const prisma = new PrismaClient();
+
 interface AppointmentData {
   title: string;
   date: Date;
   startTime: Date;
   endTime: Date;
   color?: string;
+  userId?: string;
 }
 
 export async function addAppointment(
@@ -26,43 +35,32 @@ export async function addAppointment(
   }
 
   // Get logged-in user
-  // const { userId } = auth();
-  // if (!userId) {
-  //   return { error: "User not authenticated" };
-  // }
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    return { error: "User not authenticated" };
+  }
+  console.log("User authenticated:", session.user.id);
+  const userId = session.user.id;
 
   try {
-    //   // Parse date and combine with times
-    //   const date = new Date(date);
-    //   const [startHour, startMinute] = startTime.split(":").map(Number);
-    //   const [endHour, endMinute] = endTime.split(":").map(Number);
-    //
-    //   const startDateTime = new Date(date);
-    //   startDateTime.setHours(startHour, startMinute);
-    //
-    //   const endDateTime = new Date(date);
-    //   endDateTime.setHours(endHour, endMinute);
-    //
-    //   // Create appointment
-    //   const appointmentData = await prisma.appointment.create({
-    //     data: {
-    //       title,
-    //       date,
-    //       startTime: startDateTime,
-    //       endTime: endDateTime,
-    //       color,
-    //       userId, // Assuming you want to associate with user
-    //     },
-    //   });
-    //
-    //   // Revalidate path to refresh data
-    //   revalidatePath("/");
-    //
-    //   return { data: appointmentData };
-    console.log("Appointment created:", title, date, startTime, endTime, color);
-    return {
-      data: { title, date: new Date(date), startTime, endTime, color },
-    };
+    // Create appointment
+    const appointmentData = await prisma.appointment.create({
+      data: {
+        title,
+        date,
+        startTime,
+        endTime,
+        color,
+        userId: userId, // Assuming you want to associate with user
+      },
+    });
+
+    // Revalidate path to refresh data
+    revalidatePath("/");
+
+    return { data: appointmentData };
   } catch (error) {
     console.error("Appointment creation error:", error);
     return { error: "Failed to create appointment" };

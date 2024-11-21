@@ -16,7 +16,11 @@ export default async function authMiddleware(request: NextRequest) {
 
   const authPages = ["/sign-in", "/sign-up"];
   const isAuthPage = authPages.includes(request.nextUrl.pathname);
-  const privatePages = ["/dashboard", "/user-profile"];
+  const privatePages = [
+    "/dashboard",
+    "/user-profile",
+    "/dashboard/appointment",
+  ];
   const isPrivatePage = privatePages.includes(request.nextUrl.pathname);
 
   // If user is not logged in and tries to access any protected route
@@ -38,5 +42,5 @@ export default async function authMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/user-profile", "/sign-in", "/sign-up"],
+  matcher: ["/dashboard/:path*", "/user-profile", "/sign-in", "/sign-up"],
 };

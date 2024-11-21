@@ -104,8 +104,6 @@ export function AddAppointment() {
         toast.error(error);
       } else {
         toast.success("Appointment added successfully");
-        console.log("Appointment created:", data);
-
         // Reset form
         setFormData({
           title: "",
@@ -114,18 +112,19 @@ export function AddAppointment() {
           endTime: "",
           color: "default",
         });
-        setIsSubmitting(false);
         setIsOpen(false);
       }
     } catch (error) {
       toast.error("An error occurred while processing the form.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)}>
+        <Button>
           <CalendarPlus />
           Add Appointment
         </Button>

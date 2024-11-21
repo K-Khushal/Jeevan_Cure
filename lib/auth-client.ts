@@ -30,4 +30,4 @@ export const client = createAuthClient({
   },
 });
 
-export const { signUp, signIn, signOut, useSession } = client;
+export const { signUp, signIn, signOut, useSession, getSession } = client;
