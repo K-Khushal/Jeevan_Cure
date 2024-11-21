@@ -14,8 +14,8 @@ datasource db {
 }
 
 model User {
-  id               String      @id
-  email            String      @unique
+  id               String        @id
+  email            String        @unique
   name             String
   emailVerified    Boolean
   image            String?
@@ -30,6 +30,7 @@ model User {
   Session          Session[]
   Account          Account[]
   TwoFactor        TwoFactor[]
+  Appointment      Appointment[]
 
   @@unique([username])
   @@map("user")
@@ -79,4 +80,19 @@ model TwoFactor {
   user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("twoFactor")
+}
+
+model Appointment {
+  id        String   @id @default(cuid())
+  title     String
+  date      DateTime
+  startTime DateTime
+  endTime   DateTime
+  color     String   @default("default")
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("appointment")
 }
