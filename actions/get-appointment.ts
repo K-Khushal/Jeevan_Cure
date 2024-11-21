@@ -1,8 +1,10 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+import { PrismaClient } from "@prisma/client";
 import { headers } from "next/headers";
+
+const prisma = new PrismaClient();
 
 interface Appointment {
   id: string;

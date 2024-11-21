@@ -1,3 +1,5 @@
+"use client";
+
 import GetAppointments from "@/actions/get-appointment";
 import { AddAppointment } from "@/components/dashboard/appointment/add-appointment";
 import {
