@@ -26,8 +26,6 @@ export default async function AppointmentPage() {
       color: (apt.color.toLowerCase() as EventColor) || "default",
     })) || [];
 
-  console.log(events);
-
   return (
     <Calendar events={events}>
       <div className="flex flex-col gap-4 p-4">

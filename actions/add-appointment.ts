@@ -41,7 +41,7 @@ export async function addAppointment(
   if (!session) {
     return { error: "User not authenticated" };
   }
-  console.log("User authenticated:", session.user.id);
+
   const userId = session.user.id;
 
   try {
