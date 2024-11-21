@@ -58,7 +58,7 @@ export async function addAppointment(
     });
 
     // Revalidate path to refresh data
-    revalidatePath("/");
+    revalidatePath("/dashboard");
 
     return { data: appointmentData };
   } catch (error) {
