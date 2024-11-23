@@ -38,7 +38,6 @@ export default function UserCard(props: {
   activeSessions: Session["session"][];
 }) {
   const router = useRouter();
-  // const { data, isPending, error } = useSession();
   const session = props.session;
   const [isTerminating, setIsTerminating] = useState<string>();
 

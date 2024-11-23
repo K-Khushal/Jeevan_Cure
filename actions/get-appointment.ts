@@ -27,7 +27,9 @@ async function GetAppointments(session: Session): Promise<{
 
     // Get appointments for user
     const appointments = await prisma.appointment.findMany({
-      where: { userId },
+      where: {
+        userId: userId,
+      },
     });
 
     const serializedAppointments: Appointment[] = appointments.map((apt) => ({
