@@ -1,5 +1,6 @@
 "use server";
 
+import { Session } from "@/lib/auth-types";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -16,14 +17,17 @@ interface Appointment {
   userId: string;
 }
 
-async function GetAppointments(userId: string | undefined): Promise<{
+async function GetAppointments(session: Session): Promise<{
   appointments?: Appointment[];
   error?: string;
 }> {
   try {
-    if (!userId) {
+    if (!session) {
       return { error: "Not authenticated" };
     }
+
+    const userId = session.user.id;
+    console.log("User ID:", userId);
 
     // Get appointments for user
     const appointments = await prisma.appointment.findMany({

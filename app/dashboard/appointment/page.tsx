@@ -17,9 +17,12 @@ type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
 export default async function AppointmentPage() {
   const session = await getSession();
-  const userId = session?.user.id;
 
-  const { appointments, error } = await GetAppointments(userId);
+  console.log("Session:", session);
+
+  const { appointments, error } = await GetAppointments(
+    JSON.parse(JSON.stringify(session)),
+  );
 
   const events =
     appointments?.map((apt) => ({
