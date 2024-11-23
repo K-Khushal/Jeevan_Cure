@@ -1,5 +1,3 @@
-"use server";
-
 import { Session } from "@/lib/auth-types";
 import { PrismaClient } from "@prisma/client";
 

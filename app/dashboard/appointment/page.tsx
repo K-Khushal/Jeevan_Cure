@@ -16,72 +16,80 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
 export default async function AppointmentPage() {
-  const session = await getSession();
+  try {
+    const session = await getSession();
+    if (!session) {
+      throw new Error("User not authenticated");
+    }
 
-  console.log("Session:", session);
+    const { appointments, error } = await GetAppointments(
+      JSON.parse(JSON.stringify(session)),
+    );
 
-  const { appointments, error } = await GetAppointments(
-    JSON.parse(JSON.stringify(session)),
-  );
+    if (error) {
+      throw new Error(error);
+    }
 
-  const events =
-    appointments?.map((apt) => ({
-      id: apt.id,
-      start: apt.startTime,
-      end: apt.endTime,
-      title: apt.title,
-      color: (apt.color.toLowerCase() as EventColor) || "default",
-    })) || [];
+    const events =
+      appointments?.map((apt) => ({
+        id: apt.id,
+        start: apt.startTime,
+        end: apt.endTime,
+        title: apt.title,
+        color: (apt.color.toLowerCase() as EventColor) || "default",
+      })) || [];
 
-  return (
-    <Calendar events={events}>
-      <div className="flex flex-col gap-4 p-4">
-        <div className="flex px-6 items-center gap-2">
-          <CalendarViewTrigger
-            className="aria-[current=true]:bg-accent"
-            view="day"
-          >
-            Day
-          </CalendarViewTrigger>
-          <CalendarViewTrigger
-            view="week"
-            className="aria-[current=true]:bg-accent"
-          >
-            Week
-          </CalendarViewTrigger>
-          <CalendarViewTrigger
-            view="month"
-            className="aria-[current=true]:bg-accent"
-          >
-            Month
-          </CalendarViewTrigger>
+    return (
+      <Calendar events={events}>
+        <div className="flex flex-col gap-4 p-4">
+          <div className="flex px-6 items-center gap-2">
+            <CalendarViewTrigger
+              className="aria-[current=true]:bg-accent"
+              view="day"
+            >
+              Day
+            </CalendarViewTrigger>
+            <CalendarViewTrigger
+              view="week"
+              className="aria-[current=true]:bg-accent"
+            >
+              Week
+            </CalendarViewTrigger>
+            <CalendarViewTrigger
+              view="month"
+              className="aria-[current=true]:bg-accent"
+            >
+              Month
+            </CalendarViewTrigger>
 
-          <span className="flex-1" />
+            <span className="flex-1" />
 
-          <AddAppointment />
+            <AddAppointment />
+          </div>
+          <div className="flex px-6 items-center justify-end gap-2 mb-6">
+            <CalendarPrevTrigger>
+              <ChevronLeft size={20} />
+              <span className="sr-only">Previous</span>
+            </CalendarPrevTrigger>
+
+            <CalendarTodayTrigger>Today</CalendarTodayTrigger>
+
+            <CalendarNextTrigger>
+              <ChevronRight size={20} />
+              <span className="sr-only">Next</span>
+            </CalendarNextTrigger>
+          </div>
+
+          <div className="flex-1 px-6 overflow-hidden">
+            <CalendarDayView />
+            <CalendarWeekView />
+            <CalendarMonthView />
+          </div>
         </div>
-        <div className="flex px-6 items-center justify-end gap-2 mb-6">
-          {/*<CalendarCurrentDate />*/}
-
-          <CalendarPrevTrigger>
-            <ChevronLeft size={20} />
-            <span className="sr-only">Previous</span>
-          </CalendarPrevTrigger>
-
-          <CalendarTodayTrigger>Today</CalendarTodayTrigger>
-
-          <CalendarNextTrigger>
-            <ChevronRight size={20} />
-            <span className="sr-only">Next</span>
-          </CalendarNextTrigger>
-        </div>
-
-        <div className="flex-1 px-6 overflow-hidden">
-          <CalendarDayView />
-          <CalendarWeekView />
-          <CalendarMonthView />
-        </div>
-      </div>
-    </Calendar>
-  );
+      </Calendar>
+    );
+  } catch (error) {
+    console.error("Error loading appointments:", error);
+    return <div>Error loading appointments. Please try again later.</div>;
+  }
 }
