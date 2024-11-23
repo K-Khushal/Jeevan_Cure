@@ -3,12 +3,19 @@ import { Breadcrumb, BreadcrumbItem } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useSession } from "@/lib/auth-client";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = useSession();
+
+  const user = session?.data?.user;
+
+  console.log(user);
+
   return (
     <SidebarProvider>
       <AppSidebar />
