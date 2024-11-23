@@ -1,4 +1,4 @@
-import { Session } from "@/lib/auth-types";
+import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 interface Appointment {
@@ -13,11 +13,13 @@ interface Appointment {
   userId: string;
 }
 
-async function GetAppointments(session: Session): Promise<{
+async function GetAppointments(): Promise<{
   appointments?: Appointment[];
   error?: string;
 }> {
   try {
+    const session = await getSession();
+
     if (!session) {
       return { error: "Not authenticated" };
     }
