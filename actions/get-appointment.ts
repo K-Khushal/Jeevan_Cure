@@ -34,9 +34,8 @@ async function GetAppointments(): Promise<{
 
     // Get appointments for user
     const appointments = await prisma.appointment.findMany({
-      where: { userId },
-      orderBy: {
-        date: "asc", // Sort by date ascending
+      where: {
+        userId: userId,
       },
     });
 
