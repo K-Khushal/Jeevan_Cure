@@ -10,34 +10,23 @@ import {
   CalendarViewTrigger,
   CalendarWeekView,
 } from "@/components/dashboard/appointment/full-calender";
-import { addHours } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
 export default async function AppointmentPage() {
-  const appointments = await GetAppointments();
-  console.log(appointments.appointments);
+  const { appointments, error } = await GetAppointments();
+
+  const events = appointments?.map((apt) => ({
+    id: apt.id,
+    start: new Date(apt.date),
+    end: new Date(apt.endTime),
+    title: apt.title,
+    color: apt.color as EventColor,
+  }));
 
   return (
-    <Calendar
-      events={[
-        {
-          id: "1",
-          start: new Date(),
-          end: addHours(new Date(), 1),
-          title: "event A",
-          color: "pink",
-        },
-        {
-          id: "2",
-          start: addHours(new Date(), 1.5),
-          end: addHours(new Date(), 1),
-          title: "event B",
-          color: "blue",
-        },
-      ]}
-    >
+    <Calendar events={events}>
       <div className="flex flex-col gap-4 p-4">
         <div className="flex px-6 items-center gap-2">
           <CalendarViewTrigger
