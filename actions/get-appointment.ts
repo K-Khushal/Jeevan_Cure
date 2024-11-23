@@ -1,6 +1,8 @@
+"use server";
+
 import { prisma } from "@/lib/db";
 
-interface Appointment {
+export interface Appointment {
   id: string;
   title: string;
   date: Date;
