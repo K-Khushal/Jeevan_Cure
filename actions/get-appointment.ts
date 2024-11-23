@@ -1,17 +1,15 @@
 import { Session } from "@/lib/auth-types";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 interface Appointment {
   id: string;
   title: string;
-  date: Date;
-  startTime: Date;
-  endTime: Date;
+  date: string;
+  startTime: string;
+  endTime: string;
   color: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   userId: string;
 }
 
@@ -30,12 +28,18 @@ async function GetAppointments(session: Session): Promise<{
     // Get appointments for user
     const appointments = await prisma.appointment.findMany({
       where: { userId },
-      orderBy: {
-        date: "asc", // Sort by date ascending
-      },
     });
 
-    return { appointments };
+    const serializedAppointments: Appointment[] = appointments.map((apt) => ({
+      ...apt,
+      date: apt.date.toISOString(),
+      startTime: apt.startTime.toISOString(),
+      endTime: apt.endTime.toISOString(),
+      createdAt: apt.createdAt.toISOString(),
+      updatedAt: apt.updatedAt.toISOString(),
+    }));
+
+    return { appointments: serializedAppointments };
   } catch (error) {
     console.error("Error fetching appointments:", error);
     return { error: "Failed to fetch appointments" };

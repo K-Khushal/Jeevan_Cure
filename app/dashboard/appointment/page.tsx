@@ -22,9 +22,7 @@ export default async function AppointmentPage() {
       throw new Error("User not authenticated");
     }
 
-    const { appointments, error } = await GetAppointments(
-      JSON.parse(JSON.stringify(session)),
-    );
+    const { appointments, error } = await GetAppointments(session);
 
     if (error) {
       throw new Error(error);
@@ -33,8 +31,8 @@ export default async function AppointmentPage() {
     const events =
       appointments?.map((apt) => ({
         id: apt.id,
-        start: apt.startTime,
-        end: apt.endTime,
+        start: new Date(apt.startTime),
+        end: new Date(apt.endTime),
         title: apt.title,
         color: (apt.color.toLowerCase() as EventColor) || "default",
       })) || [];
