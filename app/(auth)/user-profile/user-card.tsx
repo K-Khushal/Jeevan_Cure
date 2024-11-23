@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
-import { client, signOut, useSession } from "@/lib/auth-client";
+import { client, signOut } from "@/lib/auth-client";
 import { Session } from "@/lib/auth-types";
 import { MobileIcon } from "@radix-ui/react-icons";
 import { Edit, Laptop, Loader2, LogOut, X } from "lucide-react";
@@ -38,8 +38,8 @@ export default function UserCard(props: {
   activeSessions: Session["session"][];
 }) {
   const router = useRouter();
-  const { data, isPending, error } = useSession();
-  const session = data || props.session;
+  // const { data, isPending, error } = useSession();
+  const session = props.session;
   const [isTerminating, setIsTerminating] = useState<string>();
 
   const [isSignOut, setIsSignOut] = useState<boolean>(false);
