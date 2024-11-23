@@ -10,12 +10,16 @@ import {
   CalendarViewTrigger,
   CalendarWeekView,
 } from "@/components/dashboard/appointment/full-calender";
+import { getSession } from "@/lib/auth";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
 export default async function AppointmentPage() {
-  const { appointments, error } = await GetAppointments();
+  const session = await getSession();
+  const userId = session?.user.id;
+
+  const { appointments, error } = await GetAppointments(userId);
 
   const events =
     appointments?.map((apt) => ({
