@@ -17,13 +17,14 @@ type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 export default async function AppointmentPage() {
   const { appointments, error } = await GetAppointments();
 
-  const events = appointments?.map((apt) => ({
-    id: apt.id,
-    start: new Date(apt.date),
-    end: new Date(apt.endTime),
-    title: apt.title,
-    color: apt.color as EventColor,
-  }));
+  const events =
+    appointments?.map((apt) => ({
+      id: apt.id,
+      start: apt.startTime,
+      end: apt.endTime,
+      title: apt.title,
+      color: (apt.color.toLowerCase() as EventColor) || "default",
+    })) || [];
 
   return (
     <Calendar events={events}>

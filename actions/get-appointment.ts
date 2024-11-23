@@ -3,12 +3,12 @@ import { prisma } from "@/lib/db";
 interface Appointment {
   id: string;
   title: string;
-  date: string;
-  startTime: string;
-  endTime: string;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
   color: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   userId: string;
 }
 
@@ -33,16 +33,7 @@ async function GetAppointments(): Promise<{
       },
     });
 
-    const serializedAppointments: Appointment[] = appointments.map((apt) => ({
-      ...apt,
-      date: apt.date.toISOString(),
-      startTime: apt.startTime.toISOString(),
-      endTime: apt.endTime.toISOString(),
-      createdAt: apt.createdAt.toISOString(),
-      updatedAt: apt.updatedAt.toISOString(),
-    }));
-
-    return { appointments: serializedAppointments };
+    return { appointments };
   } catch (error) {
     console.error("Error fetching appointments:", error);
     return { error: "Failed to fetch appointments" };
