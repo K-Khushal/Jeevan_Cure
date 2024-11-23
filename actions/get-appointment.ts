@@ -1,4 +1,3 @@
-import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 interface Appointment {
@@ -18,19 +17,19 @@ async function GetAppointments(): Promise<{
   error?: string;
 }> {
   try {
-    const session = await getSession();
-
-    if (!session) {
-      return { error: "Not authenticated" };
-    }
-
-    const userId = session.user.id;
-    console.log("User ID:", userId);
+    // const session = await getSession();
+    //
+    // if (!session) {
+    //   return { error: "Not authenticated" };
+    // }
+    //
+    // const userId = session.user.id;
+    // console.log("User ID:", userId);
 
     // Get appointments for user
     const appointments = await prisma.appointment.findMany({
       where: {
-        userId: userId,
+        userId: "GZ_R5I_3w7ymvbZmX_4pN",
       },
     });
 
