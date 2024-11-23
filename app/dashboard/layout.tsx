@@ -1,3 +1,5 @@
+"use client";
+
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { Breadcrumb, BreadcrumbItem } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
