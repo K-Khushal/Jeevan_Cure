@@ -17,8 +17,6 @@ import { ChevronLeft } from "lucide-react";
 export default function CalendarView(props: { events: CalendarEvent[] }) {
   const { user } = useUser();
 
-  console.log("User:", user);
-
   return (
     <Calendar events={props.events}>
       <div className="flex flex-col gap-4 p-4">

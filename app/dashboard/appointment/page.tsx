@@ -1,12 +1,9 @@
 import GetAppointments from "@/actions/get-appointment";
 import CalendarView from "@/app/dashboard/appointment/calendar-view";
-import { getSession } from "@/lib/auth";
 
 type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
 export default async function AppointmentPage() {
-  const session = await getSession();
-  console.log(session);
   const { appointments, error } = await GetAppointments();
 
   const events =
