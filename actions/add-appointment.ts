@@ -1,10 +1,8 @@
 "use server";
 
-import { auth } from "@/lib/auth";
-
+import { getSession } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 
 const prisma = new PrismaClient();
 
@@ -35,9 +33,10 @@ export async function addAppointment(
   }
 
   // Get logged-in user
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const rawSession = await getSession();
+
+  const session = JSON.parse(JSON.stringify(rawSession));
+
   if (!session) {
     return { error: "User not authenticated" };
   }
