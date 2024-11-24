@@ -1,7 +1,5 @@
 "use server";
 
-import { getSession } from "@/lib/auth";
-import { Session } from "@/lib/auth-types";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
@@ -16,6 +14,7 @@ interface AppointmentData {
 
 export async function addAppointment(
   appointmentData: AppointmentData,
+  userId: string | undefined,
 ): Promise<{ data?: AppointmentData; error?: string }> {
   // Extract form values
   const {
@@ -31,16 +30,14 @@ export async function addAppointment(
     return { error: "Missing required appointment details" };
   }
 
-  // Get logged-in user
-  const rawSession = await getSession();
+  // // Get logged-in user
+  // const rawSession = await getSession();
+  //
+  // const session: Session = JSON.parse(JSON.stringify(rawSession));
 
-  const session: Session = JSON.parse(JSON.stringify(rawSession));
-
-  if (!session) {
+  if (!userId) {
     return { error: "User not authenticated" };
   }
-
-  const userId = session.user.id;
 
   try {
     // Create appointment
