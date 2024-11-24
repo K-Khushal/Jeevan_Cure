@@ -10,13 +10,10 @@ import { CalendarNextTrigger } from "@/components/dashboard/appointment/full-cal
 import { CalendarTodayTrigger } from "@/components/dashboard/appointment/full-calender";
 import { CalendarPrevTrigger } from "@/components/dashboard/appointment/full-calender";
 import { CalendarViewTrigger } from "@/components/dashboard/appointment/full-calender";
-import { useUser } from "@/lib/user-context";
 import { ChevronRight } from "lucide-react";
 import { ChevronLeft } from "lucide-react";
 
 export default function CalendarView(props: { events: CalendarEvent[] }) {
-  const { user } = useUser();
-
   return (
     <Calendar events={props.events}>
       <div className="flex flex-col gap-4 p-4">
