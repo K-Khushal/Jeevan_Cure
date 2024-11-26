@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import {
@@ -16,8 +16,6 @@ import { reactResetPasswordEmail } from "./email/rest-password";
 const from = process.env.BETTER_AUTH_EMAIL || "send@thehustlers.dev";
 // const to = process.env.TEST_EMAIL || "";
 
-const database = new PrismaClient();
-
 const twoFactorPlugin = twoFactor({
   otpOptions: {
     async sendOTP({ user, otp }) {
@@ -32,7 +30,8 @@ const twoFactorPlugin = twoFactor({
 });
 
 export const auth = betterAuth({
-  database: prismaAdapter(database, {
+  appName: "Jeevan Cure",
+  database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
   emailVerification: {
@@ -68,18 +67,18 @@ export const auth = betterAuth({
       });
     },
   },
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID || "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-    },
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-      // accessType: "offline",
-      // prompt: "select_account",
-    },
-  },
+  // socialProviders: {
+  //   github: {
+  //     clientId: process.env.GITHUB_CLIENT_ID || "",
+  //     clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+  //   },
+  //   google: {
+  //     clientId: process.env.GOOGLE_CLIENT_ID || "",
+  //     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+  //     // accessType: "offline",
+  //     // prompt: "select_account",
+  //   },
+  // },
   plugins: [twoFactorPlugin, bearer(), admin(), multiSession(), username()],
 });
 

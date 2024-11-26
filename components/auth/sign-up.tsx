@@ -73,6 +73,7 @@ const SignUp = () => {
       <CardContent className="grid gap-4">
         <div className="grid grid-cols-2 gap-6">
           <Button
+            disabled={true}
             variant="outline"
             onClick={() => handleSocialSignIn("github")}
           >
@@ -80,6 +81,7 @@ const SignUp = () => {
             GitHub
           </Button>
           <Button
+            disabled={true}
             variant="outline"
             onClick={() => handleSocialSignIn("google")}
           >

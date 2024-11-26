@@ -159,6 +159,7 @@ const SignIn = () => {
           </div>
           <div className="grid grid-cols-2 gap-6">
             <Button
+              disabled={true}
               variant="outline"
               onClick={() => handleSocialSignIn("github")}
             >
@@ -166,6 +167,7 @@ const SignIn = () => {
               GitHub
             </Button>
             <Button
+              disabled={true}
               variant="outline"
               onClick={() => handleSocialSignIn("google")}
             >
