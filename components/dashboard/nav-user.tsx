@@ -16,8 +16,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useSession } from "@/lib/auth-client";
 import { signOut } from "@/lib/auth-client";
+import { useUser } from "@/lib/user-context";
 import { Loader2 } from "lucide-react";
 import {
   BadgeCheck,
@@ -35,9 +35,7 @@ export function NavUser() {
   const { isMobile } = useSidebar();
   const [isSignOut, setIsSignOut] = useState<boolean>(false);
   const router = useRouter();
-  const session = useSession();
-
-  const user = session?.data?.user;
+  const { user } = useUser();
 
   return (
     <SidebarMenu>

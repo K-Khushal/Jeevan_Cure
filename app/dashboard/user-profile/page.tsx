@@ -19,7 +19,7 @@ export default async function UserProfilePage() {
   const activeSessions = await listSessions();
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="flex flex-1 flex-col gap-4 p-4 pt-0 min-h-[100vh]">
       <UserCard
         session={JSON.parse(JSON.stringify(session))}
         activeSessions={JSON.parse(JSON.stringify(activeSessions))}

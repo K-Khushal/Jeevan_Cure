@@ -63,7 +63,7 @@ export default function UserCard(props: {
       <CardContent className="grid gap-8 grid-cols-1">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
-            <Avatar className="hidden h-9 w-9 sm:flex ">
+            <Avatar className="hidden h-16 w-16 sm:flex ">
               <AvatarImage
                 src={session?.user.image || "#"}
                 alt="Avatar"
@@ -72,7 +72,7 @@ export default function UserCard(props: {
               <AvatarFallback>{session?.user.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="grid gap-1">
-              <p className="text-sm font-medium leading-none">
+              <p className="text-lg font-medium leading-none">
                 {session?.user.name} ({session?.user.username})
               </p>
               <p className="text-sm">{session?.user.email}</p>

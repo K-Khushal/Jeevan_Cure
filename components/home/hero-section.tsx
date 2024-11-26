@@ -47,13 +47,15 @@ export default function HeroSection() {
               🌍
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-4">
-              <Button
-                className="rounded-full font-medium text-[16px]"
-                size="lg"
-              >
-                <Rocket />
-                Get Started
-              </Button>
+              <a href="/sign-in">
+                <Button
+                  className="rounded-full font-medium text-[16px]"
+                  size="lg"
+                >
+                  <Rocket />
+                  Get Started
+                </Button>
+              </a>
             </div>
           </div>
         </div>
