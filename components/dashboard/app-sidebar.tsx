@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Calendar,
   CircleUserRound,
@@ -23,6 +24,9 @@ import {
   Send,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { useState } from "react";
+import { Suspense } from "react";
 import * as React from "react";
 
 const data = {
@@ -71,6 +75,14 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const currentPath = usePathname(); // Get current path from Next.js router
 
+  const [isChildrenLoaded, setIsChildrenLoaded] = useState(false);
+
+  // Simulate children loading (replace with your actual loading logic)
+  useEffect(() => {
+    const timer = setTimeout(() => setIsChildrenLoaded(true), 2000); // Simulate delay
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Sidebar variant="inset" {...props} collapsible="icon">
       <SidebarHeader>
@@ -97,8 +109,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        {!isChildrenLoaded ? (
+          <UserFallback />
+        ) : (
+          <Suspense fallback={<UserFallback />}>
+            <NavUser />
+          </Suspense>
+        )}
       </SidebarFooter>
     </Sidebar>
+  );
+}
+
+function UserFallback() {
+  return (
+    <div className="flex items-center gap-2 px-1 py-1.5">
+      <Skeleton className="h-9 w-9 rounded-lg" />
+      <div className="grid flex-1 space-y-2">
+        <Skeleton className="h-3 w-1/2" />
+        <Skeleton className="h-3 w-full" />
+      </div>
+    </div>
   );
 }

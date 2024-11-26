@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { signOut } from "@/lib/auth-client";
 import { useUser } from "@/lib/user-context";
+import { UserRound } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import {
   BadgeCheck,
@@ -28,6 +29,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import * as React from "react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -48,7 +50,9 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user?.image || "#"} alt={user?.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  <UserRound />
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user?.name}</span>
