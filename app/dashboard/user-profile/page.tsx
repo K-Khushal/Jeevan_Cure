@@ -1,29 +1,25 @@
 import { listSessions } from "@/lib/auth";
 import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import UserCard from "./user-card";
 
 export default async function UserProfilePage() {
-  // const [session, activeSessions] = await Promise.all([
-  //   auth.api.getSession({
-  //     headers: await headers(),
-  //   }),
-  //   auth.api.listSessions({
-  //     headers: await headers(),
-  //   }),
-  // ]).catch((e) => {
-  //   throw redirect("/sign-in");
-  // });
+  try {
+    const [session, activeSessions] = await Promise.all([
+      getSession(),
+      listSessions(),
+    ]);
 
-  const session = await getSession();
-
-  const activeSessions = await listSessions();
-
-  return (
-    <div className="flex flex-1 flex-col gap-4 p-4 pt-0 min-h-[100vh]">
-      <UserCard
-        session={JSON.parse(JSON.stringify(session))}
-        activeSessions={JSON.parse(JSON.stringify(activeSessions))}
-      />
-    </div>
-  );
+    return (
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0 min-h-[100vh]">
+        <UserCard
+          session={JSON.parse(JSON.stringify(session))}
+          activeSessions={JSON.parse(JSON.stringify(activeSessions))}
+        />
+      </div>
+    );
+  } catch (error) {
+    console.error("Error fetching session data:", error);
+    redirect("/dashboard");
+  }
 }
