@@ -13,8 +13,9 @@ export const client = createAuthClient({
   plugins: [
     organizationClient(),
     twoFactorClient({
-      redirect: true,
-      twoFactorPage: "/two-factor",
+      onTwoFactorRedirect() {
+        window.location.href = "/two-factor";
+      },
     }),
     passkeyClient(),
     adminClient(),
@@ -30,4 +31,4 @@ export const client = createAuthClient({
   },
 });
 
-export const { signUp, signIn, signOut, useSession, getSession } = client;
+export const { signUp, signIn, signOut, useSession } = client;
