@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
@@ -45,10 +44,6 @@ export function AddAppointment() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
-  const session = useSession();
-
-  const userId = session?.data?.user?.id;
 
   function generateTimeOptions() {
     return Array.from({ length: 96 }).map((_, i) => {
@@ -104,7 +99,7 @@ export function AddAppointment() {
       };
 
       // Submit to your backend
-      const { data, error } = await addAppointment(newFormData, userId);
+      const { data, error } = await addAppointment(newFormData);
       if (error) {
         toast.error(error);
       } else {

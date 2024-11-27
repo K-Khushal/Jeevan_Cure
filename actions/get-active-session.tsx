@@ -13,3 +13,14 @@ export async function getActiveSessions() {
     return [];
   }
 }
+
+export async function getCurrentSession() {
+  try {
+    return await auth.api.getSession({
+      headers: await headers(),
+    });
+  } catch (error) {
+    console.error("Failed to fetch current session:", error);
+    return null;
+  }
+}
