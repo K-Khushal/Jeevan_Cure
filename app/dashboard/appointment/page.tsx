@@ -1,38 +1,13 @@
 "use client";
 
-import GetAppointments from "@/actions/get-appointment";
 import CalendarView from "@/app/dashboard/appointment/calendar-view";
-import Loading from "@/app/dashboard/loading";
-import { Appointment } from "@/types/index";
-import { useState } from "react";
-import { useEffect } from "react";
-import { toast } from "sonner";
+import { AppointmentsContext } from "@/lib/appointment-context";
+import { useContext } from "react";
 
 type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
 export default function AppointmentPage() {
-  const [appointments, setAppointments] = useState<Appointment[] | undefined>(
-    [],
-  );
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const { appointments, error } = await GetAppointments();
-        if (error) {
-          toast.error(error);
-        }
-        setAppointments(appointments);
-      } catch (e) {
-        toast.error("Failed to fetch appointments");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAppointments();
-  }, []);
+  const appointments = useContext(AppointmentsContext);
 
   const events =
     appointments?.map((apt) => ({
@@ -42,10 +17,6 @@ export default function AppointmentPage() {
       title: apt.title,
       color: (apt.color.toLowerCase() as EventColor) || "default",
     })) || [];
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return <CalendarView events={events} />;
 }

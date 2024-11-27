@@ -13,7 +13,9 @@ import { CalendarViewTrigger } from "@/components/dashboard/appointment/full-cal
 import { ChevronRight } from "lucide-react";
 import { ChevronLeft } from "lucide-react";
 
-export default function CalendarView(props: { events: CalendarEvent[] }) {
+export default function CalendarView(props: {
+  events: CalendarEvent[] | undefined;
+}) {
   return (
     <Calendar events={props.events}>
       <div className="flex flex-col gap-4 p-4">
