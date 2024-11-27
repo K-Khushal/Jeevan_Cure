@@ -7,6 +7,7 @@ import { Appointment } from "@/types/index";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 type EventColor = "default" | "blue" | "green" | "pink" | "purple";
 
@@ -21,9 +22,12 @@ export default function AppointmentPage() {
     const fetchAppointments = async () => {
       try {
         const { appointments, error } = await GetAppointments();
+        if (error) {
+          toast.error(error);
+        }
         setAppointments(appointments);
       } catch (e) {
-        router.push("/dashboard");
+        toast.error("Failed to fetch appointments");
       } finally {
         setLoading(false);
       }
