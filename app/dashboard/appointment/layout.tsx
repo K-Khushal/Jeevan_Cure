@@ -1,6 +1,6 @@
 "use client";
 
-import GetAppointments from "@/actions/get-appointment";
+import { fetchAppointments } from "@/app/dashboard/appointment/fecth-appointments";
 import Loading from "@/app/dashboard/loading";
 import { AppointmentsContext } from "@/lib/appointment-context";
 import { Appointment } from "@/types/index";
@@ -12,26 +12,24 @@ interface LayoutProps {
 }
 
 export default function AppointmentLayout({ children }: LayoutProps) {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[] | undefined>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAppointments = async () => {
+    const fetchAppointmentsData = async () => {
       try {
-        const { appointments, error } = await GetAppointments();
-        if (error) {
-          toast.error(error);
-        } else {
-          setAppointments(appointments || []);
-        }
-      } catch (e) {
+        const appointments = await fetchAppointments();
+        setAppointments(appointments?.appointments);
+      } catch (error) {
         toast.error("Failed to fetch appointments");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAppointments();
+    fetchAppointmentsData();
   }, []);
 
   if (loading) {
