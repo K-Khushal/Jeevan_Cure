@@ -1,5 +1,6 @@
 "use client";
 
+import ActiveSession from "@/app/dashboard/user-profile/active-session";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,37 +24,29 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useSession } from "@/lib/auth-client";
 import { client, signOut } from "@/lib/auth-client";
 import { Session } from "@/lib/auth-types";
-import { MobileIcon } from "@radix-ui/react-icons";
-import { Edit, Laptop, Loader2, LogOut, X } from "lucide-react";
+import { User } from "@/lib/auth-types";
+import { Edit, Loader2, LogOut, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { UAParser } from "ua-parser-js";
 
 export default function UserCard(props: {
-  session: Session | null;
   activeSessions: Session["session"][];
 }) {
   const router = useRouter();
-  const session = props.session;
-  const [isTerminating, setIsTerminating] = useState<string>();
-
+  const {
+    data,
+    isPending, //loading state
+    error, //error object
+  } = useSession();
+  const user = data?.user;
   const [isSignOut, setIsSignOut] = useState<boolean>(false);
   const [emailVerificationPending, setEmailVerificationPending] =
     useState<boolean>(false);
-
-  const getUAInfo = (userAgent: string | null | undefined) => {
-    if (!userAgent) return null;
-    const parser = new UAParser(userAgent);
-    return {
-      deviceType: parser.getDevice().type,
-      osName: parser.getOS().name,
-      browserName: parser.getBrowser().name,
-    };
-  };
 
   return (
     <Card>
@@ -65,23 +58,23 @@ export default function UserCard(props: {
           <div className="flex items-center gap-4">
             <Avatar className="hidden h-16 w-16 sm:flex ">
               <AvatarImage
-                src={session?.user.image || "#"}
+                src={user?.image || "#"}
                 alt="Avatar"
                 className="object-cover"
               />
-              <AvatarFallback>{session?.user.name.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="grid gap-1">
               <p className="text-lg font-medium leading-none">
-                {session?.user.name} ({session?.user.username})
+                {user?.name} ({user?.username})
               </p>
-              <p className="text-sm">{session?.user.email}</p>
+              <p className="text-sm">{user?.email}</p>
             </div>
           </div>
-          <EditUserDialog session={session} />
+          <EditUserDialog user={user} />
         </div>
 
-        {session?.user.emailVerified ? null : (
+        {user?.emailVerified ? null : (
           <Alert>
             <AlertTitle>Verify Your Email Address</AlertTitle>
             <AlertDescription className="text-muted-foreground">
@@ -96,7 +89,7 @@ export default function UserCard(props: {
               onClick={async () => {
                 await client.sendVerificationEmail(
                   {
-                    email: session?.user.email || "",
+                    email: user?.email || "",
                   },
                   {
                     onRequest(context) {
@@ -123,51 +116,7 @@ export default function UserCard(props: {
           </Alert>
         )}
 
-        <div className="border-l-2 px-2 w-max gap-1 flex flex-col">
-          <p className="text-xs font-medium ">Active Sessions</p>
-          {props.activeSessions
-            .filter((session) => session.userAgent)
-            .map((session) => {
-              const uaInfo = getUAInfo(session.userAgent);
-              return (
-                <div key={session.id}>
-                  <div className="flex items-center gap-2 text-sm  text-black font-medium dark:text-white">
-                    {uaInfo?.deviceType === "mobile" ? (
-                      <MobileIcon />
-                    ) : (
-                      <Laptop size={16} />
-                    )}
-                    {uaInfo?.osName}, {uaInfo?.browserName}
-                    <button
-                      className="text-red-500 opacity-80  cursor-pointer text-xs border-muted-foreground border-red-600  underline "
-                      onClick={async () => {
-                        setIsTerminating(session.id);
-                        const res = await client.revokeSession({
-                          token: session.token,
-                        });
-
-                        if (res.error) {
-                          toast.error(res.error.message);
-                        } else {
-                          toast.success("Session terminated successfully");
-                        }
-                        router.refresh();
-                        setIsTerminating(undefined);
-                      }}
-                    >
-                      {isTerminating === session.id ? (
-                        <Loader2 size={15} className="animate-spin" />
-                      ) : session.id === props.session?.session.id ? (
-                        "Sign Out"
-                      ) : (
-                        "Terminate"
-                      )}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-        </div>
+        <ActiveSession activeSessions={props.activeSessions} session={data} />
       </CardContent>
       <CardFooter className="gap-2 justify-between items-center">
         <ChangePassword />
@@ -321,7 +270,7 @@ function ChangePassword() {
   );
 }
 
-function EditUserDialog(props: { session: Session | null }) {
+function EditUserDialog(props: { user: User | null | undefined }) {
   const [name, setName] = useState<string>();
   const router = useRouter();
   const [image, setImage] = useState<File | null>(null);
@@ -357,7 +306,7 @@ function EditUserDialog(props: { session: Session | null }) {
           <Input
             id="name"
             type="name"
-            placeholder={props.session?.user.name}
+            placeholder={props.user?.name}
             required
             onChange={(e) => {
               setName(e.target.value);

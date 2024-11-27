@@ -1,11 +1,11 @@
 "use client";
 
+import Loading from "@/app/dashboard/loading";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { Breadcrumb, BreadcrumbItem } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "@/lib/auth-client";
 import { UserProvider } from "@/lib/user-context";
 import { Suspense } from "react";
@@ -34,17 +34,9 @@ export default function DashboardLayout({
               </Breadcrumb>
             </div>
           </header>
-          <Suspense fallback={<DashboardFallback />}>{children}</Suspense>
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </SidebarInset>
       </SidebarProvider>
     </UserProvider>
-  );
-}
-
-function DashboardFallback() {
-  return (
-    <Skeleton className="flex items-center justify-center m-4 mt-0 min-h-[100vh] text-lg rounded-lg border bg-card text-card-foreground shadow-sm">
-      Loading...
-    </Skeleton>
   );
 }

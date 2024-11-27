@@ -8,8 +8,6 @@ import {
   twoFactor,
   username,
 } from "better-auth/plugins";
-import { headers } from "next/headers";
-import { cache } from "react";
 import { resend } from "./email/resend";
 import { reactResetPasswordEmail } from "./email/rest-password";
 
@@ -80,16 +78,4 @@ export const auth = betterAuth({
   //   },
   // },
   plugins: [twoFactorPlugin, bearer(), admin(), multiSession(), username()],
-});
-
-export const getSession = cache(async () => {
-  return await auth.api.getSession({
-    headers: await headers(),
-  });
-});
-
-export const listSessions = cache(async () => {
-  return await auth.api.listSessions({
-    headers: await headers(),
-  });
 });
