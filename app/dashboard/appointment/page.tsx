@@ -4,7 +4,6 @@ import GetAppointments from "@/actions/get-appointment";
 import CalendarView from "@/app/dashboard/appointment/calendar-view";
 import Loading from "@/app/dashboard/loading";
 import { Appointment } from "@/types/index";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -16,7 +15,6 @@ export default function AppointmentPage() {
     [],
   );
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -34,7 +32,7 @@ export default function AppointmentPage() {
     };
 
     fetchAppointments();
-  }, [router]);
+  }, []);
 
   const events =
     appointments?.map((apt) => ({
