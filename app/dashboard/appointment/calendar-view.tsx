@@ -10,12 +10,30 @@ import { CalendarNextTrigger } from "@/components/dashboard/appointment/full-cal
 import { CalendarTodayTrigger } from "@/components/dashboard/appointment/full-calender";
 import { CalendarPrevTrigger } from "@/components/dashboard/appointment/full-calender";
 import { CalendarViewTrigger } from "@/components/dashboard/appointment/full-calender";
+import { addHours } from "date-fns";
 import { ChevronRight } from "lucide-react";
 import { ChevronLeft } from "lucide-react";
 
 export default function CalendarView(props: { events: CalendarEvent[] }) {
   return (
-    <Calendar events={props.events}>
+    <Calendar
+      events={[
+        {
+          id: "1",
+          start: new Date(),
+          end: addHours(new Date(), 1),
+          title: "event A",
+          color: "pink",
+        },
+        {
+          id: "2",
+          start: addHours(new Date(), 1.5),
+          end: addHours(new Date(), 1),
+          title: "event B",
+          color: "blue",
+        },
+      ]}
+    >
       <div className="flex flex-col gap-4 p-4">
         <div className="flex px-6 items-center gap-2">
           <CalendarViewTrigger

@@ -31,22 +31,28 @@ const SignUp = () => {
       return;
     }
 
-    setLoading(true);
-    try {
-      await signUp.email({
-        email,
-        password,
-        username,
-        name: username,
-        callbackURL: "/dashboard",
-      });
-      toast.success("Account created successfully. Please sign in.");
-      router.push("/sign-in");
-    } catch (error) {
-      toast.error((error as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    await signUp.email({
+      email,
+      password,
+      username,
+      name: username,
+      callbackURL: "/dashboard",
+      fetchOptions: {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onResponse: () => {
+          setLoading(false);
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+        onSuccess: async () => {
+          toast.success("Account created successfully. Please sign in.");
+          router.push("/sign-in");
+        },
+      },
+    });
   };
 
   const handleSocialSignIn = async (

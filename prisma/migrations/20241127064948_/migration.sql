@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "account" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "user" ALTER COLUMN "emailVerified" SET DEFAULT false,
+ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP,
+ALTER COLUMN "twoFactorEnabled" SET DEFAULT false;
+
+-- AlterTable
+ALTER TABLE "verification" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;

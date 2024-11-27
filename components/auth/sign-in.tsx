@@ -26,56 +26,55 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSignInWithEmail = async () => {
-    try {
-      setLoading(true);
-      await signIn.email(
-        {
-          email,
-          password,
-          callbackURL: "/dashboard",
-          rememberMe,
+    await signIn.email(
+      {
+        email,
+        password,
+        callbackURL: "/dashboard",
+        rememberMe,
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
         },
-        {
-          onRequest: () => {
-            setLoading(true);
-          },
-          onResponse: () => {
-            setLoading(false);
-          },
-          onError: (ctx) => {
-            toast.error(ctx.error.message);
-            setLoading(false);
-          },
+        onResponse: () => {
+          setLoading(false);
         },
-      );
-    } catch (error) {
-      toast.error((error as Error).message);
-    }
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+          setLoading(false);
+        },
+        onSuccess: async () => {
+          toast.success("Logged in successfully");
+        },
+      },
+    );
   };
 
   const handleSignInWithUsername = async () => {
-    try {
-      setLoading(true);
-      await signIn.username(
-        {
-          username: email,
-          password,
-          rememberMe,
+    await signIn.username(
+      {
+        username: email,
+        password,
+        rememberMe,
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
         },
-        {
-          onResponse: () => {
-            setLoading(false);
-            router.push("/dashboard");
-          },
-          onError: (ctx) => {
-            toast.error(ctx.error.message);
-            setLoading(false);
-          },
+        onResponse: () => {
+          setLoading(false);
         },
-      );
-    } catch (error) {
-      toast.error((error as Error).message);
-    }
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+          setLoading(false);
+        },
+        onSuccess: async () => {
+          toast.success("Logged in successfully");
+          router.push("/dashboard");
+        },
+      },
+    );
   };
 
   const handleSocialSignIn = async (
