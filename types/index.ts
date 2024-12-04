@@ -1,6 +1,10 @@
-import { type ClientUploadedFileData } from "uploadthing/types";
-
-export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
+export interface UploadedFile {
+  key: string;
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
 
 export interface Appointment {
   id: string;

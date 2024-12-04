@@ -5,16 +5,12 @@ import { UploadedFilesCard } from "@/components/documents/uploaded-files-card";
 import { useUploadFile } from "@/hooks/use-upload-file";
 
 export function BasicUploaderDemo() {
-  const { onUpload, progresses, uploadedFiles, isUploading, setUploadedFiles } = useUploadFile(
-    "imageUploader",
-    {
-      defaultUploadedFiles: [],
-      onUploadProgress: ({ file, progress }) => {
-        // Progress is already handled in the hook
-        console.debug(`Upload progress for ${file.name}: ${progress}%`);
-      },
-    }
-  );
+  const { onUpload, progresses, uploadedFiles, isUploading, setUploadedFiles } = useUploadFile({
+    defaultUploadedFiles: [],
+    onUploadProgress: ({ file, progress }) => {
+      console.debug(`Upload progress for ${file.name}: ${progress}%`);
+    },
+  });
 
   const handleFileDelete = (key: string) => {
     setUploadedFiles((prev) => prev.filter((file) => file.key !== key));
