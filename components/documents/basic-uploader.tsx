@@ -9,7 +9,11 @@ export function BasicUploaderDemo() {
     "imageUploader",
     {
       defaultUploadedFiles: [],
-    },
+      onUploadProgress: ({ file, progress }) => {
+        // Progress is already handled in the hook
+        console.debug(`Upload progress for ${file.name}: ${progress}%`);
+      },
+    }
   );
 
   const handleFileDelete = (key: string) => {

@@ -142,25 +142,7 @@ export function FileUploader(props: FileUploaderProps) {
       if (onUpload) {
         try {
           setIsUploading(true);
-          const formData = new FormData();
-          formData.append('file', acceptedFiles[0]);
-
-          const response = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-          });
-
-          if (!response.ok) {
-            throw new Error('Upload failed');
-          }
-
-          const data = await response.json();
-          if (data.error) {
-            throw new Error(data.error);
-          }
-
           await onUpload(acceptedFiles);
-          toast.success('File uploaded successfully');
         } catch (error) {
           console.error('Upload error:', error);
           toast.error(error instanceof Error ? error.message : 'Failed to upload file');
