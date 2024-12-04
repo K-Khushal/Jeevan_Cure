@@ -1,44 +1,21 @@
-"use client";
-
 import { fetchAppointments } from "@/app/dashboard/appointment/fecth-appointments";
-import Loading from "@/app/dashboard/loading";
-import { AppointmentsContext } from "@/lib/appointment-context";
-import { Appointment } from "@/types/index";
-import { ReactNode, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { AppointmentProvider } from "@/components/providers/appointment-provider";
+import { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-export default function AppointmentLayout({ children }: LayoutProps) {
-  const [appointments, setAppointments] = useState<Appointment[] | undefined>(
-    [],
-  );
-  const [loading, setLoading] = useState(true);
+export default async function AppointmentLayout({ children }: LayoutProps) {
+  const { appointments, error } = await fetchAppointments();
 
-  useEffect(() => {
-    const fetchAppointmentsData = async () => {
-      try {
-        const appointments = await fetchAppointments();
-        setAppointments(appointments?.appointments);
-      } catch (error) {
-        toast.error("Failed to fetch appointments");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAppointmentsData();
-  }, []);
-
-  if (loading) {
-    return <Loading />;
+  if (error) {
+    throw new Error(error);
   }
 
   return (
-    <AppointmentsContext.Provider value={appointments}>
+    <AppointmentProvider appointments={appointments}>
       {children}
-    </AppointmentsContext.Provider>
+    </AppointmentProvider>
   );
 }
