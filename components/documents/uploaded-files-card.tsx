@@ -1,5 +1,4 @@
 import { EmptyCard } from "@/components/documents/empty-card";
-
 import {
   Card,
   CardContent,
@@ -7,40 +6,111 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import type { UploadedFile } from "@/types";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Trash2, Download } from "lucide-react";
+import { useCallback } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
+import type { UploadedFile } from "@/types";
 
 interface UploadedFilesCardProps {
   uploadedFiles: UploadedFile[];
+  onFileDelete?: (key: string) => void;
 }
 
-export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
+export function UploadedFilesCard({ uploadedFiles, onFileDelete }: UploadedFilesCardProps) {
+  const handleDelete = useCallback(async (key: string) => {
+    try {
+      const response = await fetch('/api/files', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ key }),
+      });
+
+      if (response.ok) {
+        onFileDelete?.(key);
+        toast.success('File deleted successfully');
+      } else {
+        throw new Error('Failed to delete file');
+      }
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      toast.error('Failed to delete file');
+    }
+  }, [onFileDelete]);
+
+  const handleDownload = useCallback((url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, []);
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Uploaded files</CardTitle>
-        <CardDescription>View the uploaded files here</CardDescription>
+        <CardDescription>View and manage your uploaded files</CardDescription>
       </CardHeader>
       <CardContent>
         {uploadedFiles.length > 0 ? (
-          <ScrollArea className="pb-4">
-            <div className="flex w-max space-x-2.5">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Preview</TableHead>
+                <TableHead>File Name</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {uploadedFiles.map((file) => (
-                <div key={file.key} className="relative aspect-video w-64">
-                  <Image
-                    src={file.url}
-                    alt={file.name}
-                    fill
-                    sizes="(min-width: 640px) 640px, 100vw"
-                    loading="lazy"
-                    className="rounded-md object-cover"
-                  />
-                </div>
+                <TableRow key={`${file.key}-${file.name}`}>
+                  <TableCell>
+                    <div className="relative h-16 w-16">
+                      <Image
+                        src={file.url}
+                        alt={file.name}
+                        fill
+                        sizes="64px"
+                        className="rounded-md object-cover"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>{file.name}</TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleDownload(file.url, file.name)}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleDelete(file.key)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
               ))}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+            </TableBody>
+          </Table>
         ) : (
           <EmptyCard
             title="No files uploaded"

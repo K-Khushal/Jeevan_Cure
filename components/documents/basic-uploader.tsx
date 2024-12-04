@@ -1,17 +1,20 @@
 "use client";
 
 import { FileUploader } from "@/components/documents/file-uploader";
-
 import { UploadedFilesCard } from "@/components/documents/uploaded-files-card";
 import { useUploadFile } from "@/hooks/use-upload-file";
 
 export function BasicUploaderDemo() {
-  const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
+  const { onUpload, progresses, uploadedFiles, isUploading, setUploadedFiles } = useUploadFile(
     "imageUploader",
     {
       defaultUploadedFiles: [],
     },
   );
+
+  const handleFileDelete = (key: string) => {
+    setUploadedFiles((prev) => prev.filter((file) => file.key !== key));
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -22,7 +25,10 @@ export function BasicUploaderDemo() {
         onUpload={onUpload}
         disabled={isUploading}
       />
-      <UploadedFilesCard uploadedFiles={uploadedFiles} />
+      <UploadedFilesCard 
+        uploadedFiles={uploadedFiles} 
+        onFileDelete={handleFileDelete}
+      />
     </div>
   );
 }

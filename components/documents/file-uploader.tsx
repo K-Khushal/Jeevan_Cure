@@ -22,7 +22,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example value={files}
    */
-  value?: File[];
+  files?: File[];
 
   /**
    * Function to be called when the value changes.
@@ -94,88 +94,96 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function FileUploader(props: FileUploaderProps) {
   const {
-    value: valueProp,
+    files,
     onValueChange,
     onUpload,
     progresses,
     accept = {
+      "application/pdf": [],
       "image/*": [],
+      "application/msword": [],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [],
     },
-    maxSize = 1024 * 1024 * 2,
+    maxSize = 1024 * 1024 * 4, // 4MB
     maxFileCount = 1,
     multiple = false,
     disabled = false,
     className,
-    ...dropzoneProps
+    ...restProps
   } = props;
 
-  const [files, setFiles] = useControllableState({
-    prop: valueProp,
+  const [value, setValue] = useControllableState<File[]>({
+    prop: files,
+    defaultProp: [],
     onChange: onValueChange,
   });
 
+  const [isUploading, setIsUploading] = React.useState(false);
+
   const onDrop = React.useCallback(
-    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
-      if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
-        toast.error("Cannot upload more than 1 file at a time");
-        return;
-      }
-
-      if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`Cannot upload more than ${maxFileCount} files`);
-        return;
-      }
-
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        }),
-      );
-
-      const updatedFiles = files ? [...files, ...newFiles] : newFiles;
-
-      setFiles(updatedFiles);
-
+    async (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (rejectedFiles.length > 0) {
-        rejectedFiles.forEach(({ file }) => {
-          toast.error(`File ${file.name} was rejected`);
+        rejectedFiles.forEach((file) => {
+          file.errors.forEach((error) => {
+            if (error.code === "file-too-large") {
+              toast.error(
+                `File is too large. Max size is ${formatBytes(maxSize)}`
+              );
+            } else {
+              toast.error(error.message);
+            }
+          });
         });
+        return;
       }
 
-      if (
-        onUpload &&
-        updatedFiles.length > 0 &&
-        updatedFiles.length <= maxFileCount
-      ) {
-        const target =
-          updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`;
+      setValue(acceptedFiles);
 
-        toast.promise(onUpload(updatedFiles), {
-          loading: `Uploading ${target}...`,
-          success: () => {
-            setFiles([]);
-            return `${target} uploaded`;
-          },
-          error: `Failed to upload ${target}`,
-        });
+      if (onUpload) {
+        try {
+          setIsUploading(true);
+          const formData = new FormData();
+          formData.append('file', acceptedFiles[0]);
+
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error('Upload failed');
+          }
+
+          const data = await response.json();
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          await onUpload(acceptedFiles);
+          toast.success('File uploaded successfully');
+        } catch (error) {
+          console.error('Upload error:', error);
+          toast.error(error instanceof Error ? error.message : 'Failed to upload file');
+        } finally {
+          setIsUploading(false);
+        }
       }
     },
-
-    [files, maxFileCount, multiple, onUpload, setFiles],
+    [maxSize, onUpload, setValue]
   );
 
   function onRemove(index: number) {
-    if (!files) return;
-    const newFiles = files.filter((_, i) => i !== index);
-    setFiles(newFiles);
+    if (!value) return;
+    const newFiles = value.filter((_, i) => i !== index);
+    setValue(newFiles);
     onValueChange?.(newFiles);
   }
 
   // Revoke preview url when component unmounts
   React.useEffect(() => {
     return () => {
-      if (!files) return;
-      files.forEach((file) => {
+      if (!value) return;
+      value.forEach((file) => {
         if (isFileWithPreview(file)) {
           URL.revokeObjectURL(file.preview);
         }
@@ -184,7 +192,7 @@ export function FileUploader(props: FileUploaderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
+  const isDisabled = disabled || (value?.length ?? 0) >= maxFileCount;
 
   return (
     <div className="relative flex flex-col gap-6 overflow-hidden">
@@ -206,7 +214,7 @@ export function FileUploader(props: FileUploaderProps) {
               isDisabled && "pointer-events-none opacity-60",
               className,
             )}
-            {...dropzoneProps}
+            {...restProps}
           >
             <input {...getInputProps()} />
             {isDragActive ? (
@@ -246,10 +254,10 @@ export function FileUploader(props: FileUploaderProps) {
           </div>
         )}
       </Dropzone>
-      {files?.length ? (
+      {value?.length ? (
         <ScrollArea className="h-fit w-full px-3">
           <div className="flex max-h-48 flex-col gap-4">
-            {files?.map((file, index) => (
+            {value?.map((file, index) => (
               <FileCard
                 key={index}
                 file={file}
