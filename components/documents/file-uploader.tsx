@@ -28,7 +28,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * Function to be called when the value changes.
    * @type (files: File[]) => void
    * @default undefined
-   * @example onValueChange={(files) => setFiles(files)}
+   * @example onValueChange={(files) => setValue(files)}
    */
   onValueChange?: (files: File[]) => void;
 
@@ -102,7 +102,8 @@ export function FileUploader(props: FileUploaderProps) {
       "application/pdf": [],
       "image/*": [],
       "application/msword": [],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        [],
     },
     maxSize = 1024 * 1024 * 4, // 4MB
     maxFileCount = 1,
@@ -118,40 +119,54 @@ export function FileUploader(props: FileUploaderProps) {
     onChange: onValueChange,
   });
 
-  const [isUploading, setIsUploading] = React.useState(false);
-
   const onDrop = React.useCallback(
-    async (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
-      if (rejectedFiles.length > 0) {
-        rejectedFiles.forEach((file) => {
-          file.errors.forEach((error) => {
-            if (error.code === "file-too-large") {
-              toast.error(
-                `File is too large. Max size is ${formatBytes(maxSize)}`
-              );
-            } else {
-              toast.error(error.message);
-            }
-          });
-        });
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
+      if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
+        toast.error("Cannot upload more than 1 file at a time");
         return;
       }
 
-      setValue(acceptedFiles);
+      if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
+        toast.error(`Cannot upload more than ${maxFileCount} files`);
+        return;
+      }
 
-      if (onUpload) {
-        try {
-          setIsUploading(true);
-          await onUpload(acceptedFiles);
-        } catch (error) {
-          console.error('Upload error:', error);
-          toast.error(error instanceof Error ? error.message : 'Failed to upload file');
-        } finally {
-          setIsUploading(false);
-        }
+      const newFiles = acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        }),
+      );
+
+      const updatedFiles = files ? [...files, ...newFiles] : newFiles;
+
+      setValue(updatedFiles);
+
+      if (rejectedFiles.length > 0) {
+        rejectedFiles.forEach(({ file }) => {
+          toast.error(`File ${file.name} was rejected`);
+        });
+      }
+
+      if (
+        onUpload &&
+        updatedFiles.length > 0 &&
+        updatedFiles.length <= maxFileCount
+      ) {
+        const target =
+          updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`;
+
+        toast.promise(onUpload(updatedFiles), {
+          loading: `Uploading ${target}...`,
+          success: () => {
+            setValue([]);
+            return `${target} uploaded`;
+          },
+          error: `Failed to upload ${target}`,
+        });
       }
     },
-    [maxSize, onUpload, setValue]
+
+    [files, maxFileCount, multiple, onUpload, setValue],
   );
 
   function onRemove(index: number) {
